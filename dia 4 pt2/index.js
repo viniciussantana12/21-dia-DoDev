@@ -1,7 +1,7 @@
 let nome
 let idade
 let temCarta = false 
-let temCarro= false 
+let temCarro = false 
 
 nome = prompt("Qual é seu nome?")
 idade = parseInt(prompt("Qual é a sua idade?"))
