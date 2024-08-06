@@ -1,4 +1,3 @@
-// Classe Carro
 class Carro {
   constructor(nome, potencia, velocidadeMaxima, aceleracao) {
       this.nome = nome; 
@@ -13,7 +12,7 @@ class Carro {
   }
 }
 
-// Classe Corrida
+
 class Corrida {
   constructor(nome, tipo, distancia, participantes) {
       this.nome = nome; 
@@ -47,7 +46,7 @@ class Corrida {
   }
 }
 
-// Exemplo de uso
+
 const carro1 = new Carro("Ferrari", 1000, 350, 2.5);
 const carro2 = new Carro("Mercedes", 950, 340, 2.7);
 const carro3 = new Carro("McLaren", 920, 330, 3.0);
