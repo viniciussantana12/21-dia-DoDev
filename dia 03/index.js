@@ -3,8 +3,6 @@ let idade = 0
 let altura = 0
 let peso = 0
 
-//
-
 nome = prompt('Qual é seu nome?')
 idade = parseInt(prompt('Qual é sua idade?'))
 altura = parseFloat(prompt('Qual é sua altura?'))
