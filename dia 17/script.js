@@ -1,176 +1,159 @@
-let hoteis = [];
-let reservas = [];
-
-// Função para verificar se um ID já existe em um array 
-function verificarIdExistente(array, id) {
-    return array.some(item => item.id === id);
+class Hotel {
+    Id 
+    Nome 
+    Categoria 
+    Endereco 
+    Telefone
+    constructor(id, nome, categoria, endereco, telefone) {
+        this.Id = id
+        this.Nome = nome
+        this.Categoria = categoria
+        this.Endereco = endereco
+        this.Telefone = telefone
+    }
 }
 
-// Função para cadastrar um hotel 
-function cadastrarHotel(id, nome, categoria, endereco, telefone) {
-    if (verificarIdExistente(hoteis, id)) {
-        console.log("Erro: ID do hotel já existe.");
-        return;
+class Reserva {
+    Id
+    IdHotel
+    Responsavel
+    DiaEntrada
+    DiaSaida
+    constructor(id, idHotel, responsavel, diaEntrada, diaSaida) {
+        this.Id = id
+        this.IdHotel = idHotel
+        this.Responsavel = responsavel
+        this.DiaEntrada = diaEntrada
+        this.DiaSaida = diaSaida
     }
-
-    let novoHotel = {
-        id: id,
-        nome: nome,
-        categoria: categoria,
-        endereco: endereco,
-        telefone: telefone
-    };
-
-    hoteis.push(novoHotel);
-    console.log("Hotel cadastrado com sucesso!");
 }
 
-// Função para cadastrar uma reserva
-function cadastrarReserva(id, idHotel, nomeResponsavel, diaEntrada, diaSaida) {
-    if (verificarIdExistente(reservas, id)) {
-        console.log("Erro: ID da reserva já existe.");
-        return;
-    }
+let hoteis = []
+let reservas = []
+let idHotel = 1
+let idReserva = 1
 
-    let hotel = hoteis.find(hotel => hotel.id === idHotel);
-    if (!hotel) {
-        console.log("Erro: Hotel com ID " + idHotel + " não encontrado.");
-        return;
-    }
-
-    if (new Date(diaEntrada) > new Date(diaSaida)) {
-        console.log("Erro: O dia de entrada não pode ser maior que o dia de saída.");
-        return;
-    }
-
-    let novaReserva = {
-        id: id,
-        idHotel: idHotel,
-        nomeResponsavel: nomeResponsavel,
-        diaEntrada: diaEntrada,
-        diaSaida: diaSaida
-    };
-
-    reservas.push(novaReserva);
-    console.log("Reserva cadastrada com sucesso!");
+function CadastrarHotel(){
+    let nome = prompt("Digite o nome do hotel")
+    let categoria = parseInt(prompt("Digite a categoria do hotel"))
+    let endereco = prompt("Digite o endereço do hotel")
+    let telefone = prompt("Digite o telefone do hotel")
+    let hotel = new Hotel(idHotel, nome, categoria, endereco, telefone)
+    idHotel++
+    hoteis.push(hotel)
 }
 
-function exibirReservasPorHotel(idHotel) {
-    let hotel = hoteis.find(hotel => hotel.id === idHotel);
-    if (!hotel) {
-        console.log("Erro: Hotel com ID " + idHotel + " não encontrado.");
-        return;
-    }
+function CadastrarReserva() {
+    let idHotel 
+    let existe = false 
+    do {
+        idHotel = parseInt(prompt("Digite o id do hotel"))
+        for (let i = 0; i < hoteis.length; i++) {
+            if (idHotel == hoteis[i].Id) {
+                existe = true;
+                break;
+            } else if (i == hoteis.length - 1) {
+                console.log("id de hotel não cadastrado")
+            }
+        }
+    } while (!existe)
 
-    console.log(`Reservas no hotel ${hotel.nome}:`);
+    let nome = prompt("digite o nome do responsável")
+    let diaEntrada = parseInt(prompt("Digite o dia de entrada"))
+    let diaSaida
+    do {
+        diaSaida = parseInt(prompt("Digite o dia de saída"))
+        if (diaSaida < diaEntrada) {
+            console.log("o dia de saída deve ser maior que o dia de entrada")
+        }
+    } while (diaSaida < diaEntrada)
+    
+    let reserva = new Reserva(idReserva, idHotel, nome, diaEntrada, diaSaida)
+    idReserva++
+    reservas.push(reserva)
+}
+
+function ProcurarReservasPeloHotel(idHotel) {
     reservas.forEach(reserva => {
-        if (reserva.idHotel === idHotel) {
-            console.log(`Nome do responsável: ${reserva.nomeResponsavel}, Dia de entrada: ${reserva.diaEntrada}, Dia de saída: ${reserva.diaSaida}`);
+        if (idHotel == reserva.IdHotel) {
+            let i = idHotel - 1
+            console.log("hote:", hoteis[i].Nome)
+            console.log("responsável", reserva.Responsavel)
+            console.log("Dia de entrada:", reserva.DiaEntrada)
+            console.log("Dia de saída:", reserva.DiaSaida)
         }
-    });
+    })
 }
 
-function exibirDetalhesReserva(idReserva) {
-    let reserva = reservas.find(reserva => reserva.id === idReserva);
-    if (!reserva) {
-        console.log("Erro: Reserva com ID " + idReserva + " não encontrada.");
-        return;
-    }
-
-    let hotel = hoteis.find(hotel => hotel.id === reserva.idHotel);
-
-    console.log(`Nome do hotel: ${hotel.nome}`);
-    console.log(`Endereço: ${hotel.endereco}`);
-    console.log(`Dia de entrada: ${reserva.diaEntrada}`);
-    console.log(`Dia de saída: ${reserva.diaSaida}`);
+function ProcurarHotelPelaReserva(idReserva) {
+    let idHotel = reservas[idReserva - 1].IdHotel
+    console.log("hotel:", hoteis[idHotel - 1].Nome)
+    console.log("endereço:", hoteis[idHotel - 1].Endereco)
+    console.log("dia de entrada:", reservas[idReserva - 1].DiaEntrada)
+    console.log("dia de saída:", reservas[idReserva - 1].DiaSaida)
 }
 
-function exibirReservasPorNome(nomeResponsavel) {
-    console.log(`Reservas de ${nomeResponsavel}:`);
-    reservas.forEach(reserva => {
-        if (reserva.nomeResponsavel === nomeResponsavel) {
-            let hotel = hoteis.find(hotel => hotel.id === reserva.idHotel);
-            console.log(`Hotel: ${hotel.nome}, Dia de entrada: ${reserva.diaEntrada}, Dia de saída: ${reserva.diaSaida}`);
-        }
-    });
-}
-
-function buscarHoteisPorCategoria(categoria) {
-    return hoteis.filter(hotel => hotel.categoria === categoria);
-}
-
-function atualizarTelefoneHotel(idHotel, novoTelefone) {
-    let hotel = hoteis.find(hotel => hotel.id === idHotel);
-    if (!hotel) {
-        console.log("Erro: Hotel com ID " + idHotel + " não encontrado.");
-        return;
-    }
-
-    hotel.telefone = novoTelefone;
-    console.log("Telefone atualizado com sucesso!");
-}
-
-function iniciarSistema() {
-    let continuar = true;
-
-    while (continuar) {
-        let opcao = prompt(
-            "O que você deseja fazer?\n" +
-            "1. Cadastrar hotel\n" +
-            "2. Cadastrar reserva\n" +
-            "3. Exibir reservas por hotel\n" +
-            "4. Exibir detalhes de uma reserva\n" +
-            "5. Exibir reservas por nome\n" +
-            "6. Buscar hotéis por categoria\n" +
-            "7. Atualizar telefone de hotel\n" +
-            "8. Encerrar programa"
-        );
-
-        switch (opcao) {
-            case "1":
-                let idHotel = prompt("Digite o ID do hotel:");
-                let nomeHotel = prompt("Digite o nome do hotel:");
-                let categoriaHotel = prompt("Digite a categoria do hotel:");
-                let enderecoHotel = prompt("Digite o endereço do hotel:");
-                let telefoneHotel = prompt("Digite o telefone do hotel:");
-                cadastrarHotel(idHotel, nomeHotel, categoriaHotel, enderecoHotel, telefoneHotel);
-                break;
-            case "2":
-                let idReserva = prompt("Digite o ID da reserva:");
-                let idHotelReserva = prompt("Digite o ID do hotel:");
-                let nomeResponsavel = prompt("Digite o nome do responsável:");
-                let diaEntrada = prompt("Digite o dia de entrada (YYYY-MM-DD):");
-                let diaSaida = prompt("Digite o dia de saída (YYYY-MM-DD):");
-                cadastrarReserva(idReserva, idHotelReserva, nomeResponsavel, diaEntrada, diaSaida);
-                break;
-            case "3":
-                let idHotelParaExibir = prompt("Digite o ID do hotel:");
-                exibirReservasPorHotel(idHotelParaExibir);
-                break;
-            case "4":
-                let idReservaParaExibir = prompt("Digite o ID da reserva:");
-                exibirDetalhesReserva(idReservaParaExibir);
-                break;
-            case "5":
-                let nomeParaExibir = prompt("Digite o nome do responsável:");
-                exibirReservasPorNome(nomeParaExibir);
-                break;
-            case "6":
-                let categoriaParaBuscar = prompt("Digite a categoria do hotel:");
-                let hoteisEncontrados = buscarHoteisPorCategoria(categoriaParaBuscar);
-                console.log("Hotéis encontrados:", hoteisEncontrados);
-                break;
-            case "7":
-                let idHotelParaAtualizar = prompt("Digite o ID do hotel:");
-                let novoTelefone = prompt("Digite o novo telefone do hotel:");
-                atualizarTelefoneHotel(idHotelParaAtualizar, novoTelefone);
-                break;
-            case "8":
-                continuar = false;
-                console.log("Programa encerrado.");
-                break;
-            default:
-                console.log("Opção inválida. Tente novamente.");
+function ProcurarReservaPeloNome(nome) {
+    for (let i = 0; i < reservas.length; i++) {
+        if (nome == reservas[i].Responsavel) {
+            console.log("id da Reserva: " + reservas[i].Id)
+            console.log("hotel: " + hoteis[(reservas[i].IdHotel) - 1].Nome)
         }
     }
 }
+
+function ProcurarHotelPelaCategoria(categoria) {
+    let hoteisProcurados = []
+    for (let i = 0; i < hoteis.length; i++) {
+        if (categoria == hoteis[i].Categoria) {
+            hoteisProcurados.push(hoteis[i].Nome)
+        }
+    }
+    return hoteisProcurados
+}
+
+function AtualizarTelefone(idHotel, telefone) {
+    hoteis[idHotel - 1].Telefone = telefone 
+    console.log("Número de telefone atualizado!")
+}
+
+let continuar = true
+do {
+    let opcao = prompt("escolha uma opção: \n1- Cadastrar hotel \n2- Cadastrar Reserva \n3 - Procurar reserva pelo hotel" + 
+        "\n4 - Porcurar hotel pela reserva \n5 - Procurar reserva pelo responsável \n6 - Procurar hotéis por categoria" +
+        "\n7 - Atualizar telefone de um hotel \n8 - encerrar o programa")
+    
+    switch (opcao){
+        case "1":
+            CadastrarHotel()
+            break;
+        case "2":
+            CadastrarReserva()
+            break;
+        case "3":
+            ProcurarReservasPeloHotel(prompt("Digite o id do hotel"))
+            break;
+        case "4":
+            ProcurarHotelPelaReserva(prompt("Digite o id da reserva"))
+            break;
+        case "5":
+            ProcurarReservaPeloNome(prompt("Digite o nome do responsável pela reserva"))
+            break;
+        case "6":
+            let hoteisProcurados = ProcurarHotelPelaCategoria(parseInt(prompt("Digite a categoria que deseja procurar")))
+            console.log(hoteisProcurados)
+            break;
+        case "7":
+            let idHotel = parseInt(prompt("Digite o id do hotel que deseja atualizar"))
+            let telefone = prompt("digite o novo telefone")
+            AtualizarTelefone(idHotel, telefone)
+            break;
+        case "8":
+            console.log("Programa encerrado")
+            continuar = false
+            break;
+        default:
+            console.log("opção inválida")
+            break;
+    }
+} while (continuar)
