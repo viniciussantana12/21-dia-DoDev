@@ -1,3 +1,4 @@
+
 let num1 = parseInt(prompt("Digite um número"))
 let num2 = parseInt(prompt("Digite outro número"))
 let opcao = parseInt(prompt("Escolha a operação que deseja realizar:" + "\n1 = + \n2 = - \n3 = * \n4 = /"))

@@ -77,7 +77,7 @@ function ProcurarReservasPeloHotel(idHotel) {
     reservas.forEach(reserva => {
         if (idHotel == reserva.IdHotel) {
             let i = idHotel - 1
-            console.log("hote:", hoteis[i].Nome)
+            console.log("hotel:", hoteis[i].Nome)
             console.log("responsável", reserva.Responsavel)
             console.log("Dia de entrada:", reserva.DiaEntrada)
             console.log("Dia de saída:", reserva.DiaSaida)
